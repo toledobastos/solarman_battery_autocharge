@@ -182,10 +182,10 @@ write.table(daily.estimates, "daily.estimates.csv", sep = ",", row.names = F, co
 solis_battery_charging_par.py.response <- solis_battery_charging_on.py.response <- solis_battery_charging_off.py.response <- character()
 
 # build python calls
-solis_battery_status.py <- "/usr/bin/python /home/bastos/ProgramData/solis_battery_charging/solis_battery_status.py"
-solis_battery_charging_off.py <- "/usr/bin/python /home/bastos/ProgramData/solis_battery_charging/solis_battery_charging_off.py"
-solis_battery_charging_on.py <- "/usr/bin/python /home/bastos/ProgramData/solis_battery_charging/solis_battery_charging_on.py"
-solis_battery_charging_par.py <- "/usr/bin/python /home/bastos/ProgramData/solis_battery_charging/solis_battery_charging_par.py"
+solis_battery_status.py <- paste0("/usr/bin/python ", wd, "solis_battery_status.py")
+solis_battery_charging_off.py <- paste0("/usr/bin/python ", wd, "solis_battery_charging_off.py")
+solis_battery_charging_on.py <- paste0("/usr/bin/python ", wd, "solis_battery_charging_on.py")
+solis_battery_charging_par.py <- paste0("/usr/bin/python ", wd, "solis_battery_charging_par.py")
 
 # set auto charge on/off
 if(best.guestimate > over.production) {
