@@ -234,10 +234,10 @@ names(solis_battery_status.py.response) <- c("status", "current", "time")
 solis_battery_status.py.response.df <- data.frame(status=solis_battery_status.py.response[1], current=solis_battery_status.py.response[2], time=solis_battery_status.py.response[3])
 rownames(solis_battery_status.py.response.df) <- NULL
 
-# export to home assistant sensors
-writeLines(text = solis_battery_status.py.response[1], con = "/media/solis_battery_status.txt")
-writeLines(text = solis_battery_status.py.response[2], con = "/media/solis_battery_current.txt")
-writeLines(text = solis_battery_status.py.response[3], con = "/media/solis_battery_time.txt")
-writeLines(text = as.character(charge.required), con = "/media/charge.required.txt")
-writeLines(text = as.character(best.guestimate), con = "/media/best.guestimate.txt")
+## export to home assistant sensors
+#writeLines(text = solis_battery_status.py.response[1], con = "/media/solis_battery_status.txt")
+#writeLines(text = solis_battery_status.py.response[2], con = "/media/solis_battery_current.txt")
+#writeLines(text = solis_battery_status.py.response[3], con = "/media/solis_battery_time.txt")
+#writeLines(text = as.character(charge.required), con = "/media/charge.required.txt")
+#writeLines(text = as.character(best.guestimate), con = "/media/best.guestimate.txt")
 
