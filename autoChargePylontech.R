@@ -137,7 +137,7 @@ if(length(met.eireann.solar) > 0) {
   response.met.eireann$date <- as.Date(response.met.eireann$from)
   eireann1 <- response.met.eireann[response.met.eireann$date %in% target.forecast,]
   guess.met.eireann <- ceiling((sum(as.numeric(eireann1[[9]]))*kwp)*0.85) # take down .15 for accuracy
-  # ceiling(aggregate(as.numeric(response.met.eireann[[9]]), by=list(response.met.eireann$date), sum)$x*2.92)
+  # ceiling(aggregate(as.numeric(response.met.eireann[[9]]), by=list(response.met.eireann$date), sum)$x*kwp)
 }
 
 # query forecast.solar
