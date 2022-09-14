@@ -1,4 +1,4 @@
-# solarman_battery_autocharge - a Frankenstein code to manage solar prediction and battery autocharge
+# solarman_battery_autocharge - solar prediction and battery autocharge for pysolarmanv5
 
 The code uses R and Python. Python handles the calls to the Solis modbus, made possible via TCP through an open port, which was developed and documented in the pysolarmanv5 library. 
 
