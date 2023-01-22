@@ -13,7 +13,7 @@ min.production <- 8000 # min wh to get through the day avoiding day unit rates
 winter.extra <- 2000 # extra wh to get through the winter days avoiding day unit rates 
 over.production <- 12000 # threshold after which autocharge is turned off if battery is half full
 # battery specs
-battery.size <- (3552*2) # battery usable storage in wh
+battery.size <- (3552*2) # battery storage in wh
 battery.voltage <- 48 # battery changing voltage
 battery.max.current <- 37 # battery recommended maximum charge rate
 retrieve.battery.soc <- TRUE # requires access to home assistant database 
