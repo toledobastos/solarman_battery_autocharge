@@ -30,7 +30,7 @@ latitude <- "" # location (lat) of solar installation
 longitude <- "" # location (lon) of solar installation 
 kwp <- "" # kwp of solar installation 
 slope <- "" # slope/angle of solar installation
-orientation <- 180 # orientation of solar installation, where 0 (not 180!) equals due south
+orientation.forecast.solar <- 180 # orientation of solar installation, where 0 (not 180!) equals due south
 # solcast account
 solcast.resource.id <- ""
 solcast.api.key <- ""
