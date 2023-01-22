@@ -20,30 +20,29 @@ retrieve.battery.soc <- TRUE # requires access to home assistant database
 record.solar.generation <- TRUE # requires access to home assistant database
 battery.reserve <- 55 # battery dod plus minimum charge (percentage)
 battery.reserve.force <- TRUE # charge overnight to battery.reserve  
-record.solar.generation <- TRUE # requires access to home assistant database 
-winter.buffer <- 740 # minimum morning charge for winter days when irradiation comes later in the day
+winter.buffer <- 740 # minimum morning charge for winter days when the sun comes later in the day
 # charging schedule
 adjust.dst.winter <- TRUE # set to TRUE for auto adjustment based on daylight saving time
 winter.schedule <- c(0, 15, 7, 59) # set charging schedule for the winter period
-summer.schedule <- c(0, 15, 8, 58) # set charging schedule for the summer period
+summer.schedule <- c(0, 15, 8, 59) # set charging schedule for the summer period
 # solar farm details
 latitude <- "" # location (lat) of solar installation 
 longitude <- "" # location (lon) of solar installation 
 kwp <- "" # kwp of solar installation 
 slope <- "" # slope/angle of solar installation
-orientation <- 180 # orientatio of solar installation, where 180 equal due south
+orientation <- 180 # orientation of solar installation, where 0 (not 180!) equals due south
 # solcast account
 solcast.resource.id <- ""
 solcast.api.key <- ""
 # parameters for met eireann, solcast, and forecast.solar
 calibrate.best.guestimate <- FALSE # calibrate forecast data on moving averages of solar production
 calibrate.days <- 5 # number of preceding days to use in the calibration model (requires available data in daily.estimates.csv)
-query.solcast <- TRUE # set fo TRUE to query solcast for weather forecasts 
-query.forecast.solar <- TRUE # set fo TRUE to query forecast.solar for weather forecasts
-query.met.eireann <- TRUE # set fo TRUE to query met.eireann for weather forecasts. NOTE: service only available in Ireland 
-use.solcast <- FALSE # set fo false to remove prediction from the model
-use.forecast.solar <- FALSE # set fo false to remove prediction from the model
-use.met.eireann <- TRUE # set fo false to remove prediction from the model 
+query.solcast <- TRUE # set TRUE to query solcast for weather forecasts 
+query.forecast.solar <- TRUE # set TRUE to query forecast.solar for weather forecasts
+query.met.eireann <- TRUE # set TRUE to query met.eireann for weather forecasts. NOTE: service only available in Ireland 
+use.solcast <- FALSE # set FALSE to remove prediction from the model
+use.forecast.solar <- FALSE # set FALSE to remove prediction from the model
+use.met.eireann <- TRUE # set FALSE to remove prediction from the model 
 ###
 ### end of parameters for autocharge
 ###
@@ -104,7 +103,7 @@ if(record.solar.generation==T) {
 
 # read from inverter
 charging.time <- 8
-solis_battery_status.py <- "/usr/bin/python3 /home/bastos/ProgramData/solis_battery_charging/solis_battery_status.py"
+solis_battery_status.py <- paste0("/usr/bin/python ", wd, "solis_battery_status.py")
 solis_battery_status.py.response <- character()
 while(length(solis_battery_status.py.response)!=3) { Sys.sleep(5); solis_battery_status.py.response <- system(paste0(solis_battery_status.py), intern = T) }
 current.schedule <- as.numeric(unlist(regmatches(solis_battery_status.py.response[3], gregexpr("[[:digit:]]+", solis_battery_status.py.response[3]))))
@@ -119,7 +118,7 @@ if(adjust.dst.winter==T) {
     if(all(current.schedule==summer.schedule)) { print("Time schedule correct") } else {
       while(length(solis_battery_time.py.response)!=12) {
         Sys.sleep(5)
-        try( solis_battery_time.py.response <- system(paste0("/usr/bin/python3 /home/bastos/ProgramData/solis_battery_charging/solis_battery_charging_time_par.py ", paste(summer.schedule, collapse = " ")), intern = T), silent = T)
+        try( solis_battery_time.py.response <- system(paste0("/usr/bin/python ", wd, "solis_battery_charging_time_par.py ", paste(summer.schedule, collapse = " ")), intern = T), silent = T)
       }
     }
   }
@@ -128,7 +127,7 @@ if(adjust.dst.winter==T) {
     if(all(current.schedule==winter.schedule)) { print("Time schedule correct") } else {
       while(length(solis_battery_time.py.response)!=12) {
         Sys.sleep(5)
-        try( solis_battery_time.py.response <- system(paste0("/usr/bin/python3 /home/bastos/ProgramData/solis_battery_charging/solis_battery_charging_time_par.py ", paste(winter.schedule, collapse = " ")), intern = T), silent=T)
+        try( solis_battery_time.py.response <- system(paste0("/usr/bin/python ", wd, "solis_battery_charging_time_par.py ", paste(winter.schedule, collapse = " ")), intern = T), silent = T)
       }
     }
   }
