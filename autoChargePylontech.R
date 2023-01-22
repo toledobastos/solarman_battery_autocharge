@@ -29,7 +29,7 @@ summer.schedule <- c(0, 15, 8, 59) # set charging schedule for the summer period
 latitude <- "" # location (lat) of solar installation 
 longitude <- "" # location (lon) of solar installation 
 kwp <- "" # kwp of solar installation 
-slope <- "" # slope/angle of solar installation
+slope <- "" # slope/angle of solar installation 
 orientation.forecast.solar <- 180 # orientation of solar installation, where 0 (not 180!) equals due south
 # solcast account
 solcast.resource.id <- ""
