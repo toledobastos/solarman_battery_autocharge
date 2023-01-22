@@ -20,9 +20,9 @@ retrieve.battery.soc <- TRUE # requires access to home assistant database
 record.solar.generation <- TRUE # requires access to home assistant database
 battery.reserve <- 55 # battery dod plus minimum charge (percentage)
 battery.reserve.force <- TRUE # charge overnight to battery.reserve  
-winter.buffer <- 740 # minimum morning charge for winter days when the sun comes later in the day
+winter.buffer <- 740 # minimum morning charge in wh for winter days when the sun comes later in the day
 # charging schedule
-adjust.dst.winter <- TRUE # set to TRUE for auto adjustment based on daylight saving time
+adjust.dst.winter <- TRUE # set TRUE for auto adjustment based on daylight saving time
 winter.schedule <- c(0, 15, 7, 59) # set charging schedule for the winter period
 summer.schedule <- c(0, 15, 8, 59) # set charging schedule for the summer period
 # solar farm details
