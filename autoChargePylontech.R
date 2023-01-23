@@ -168,7 +168,7 @@ if(query.met.eireann==TRUE) {
 
 # query forecast.solar
 response.forecast.solar <- character()
-if(query.met.eireann==TRUE) {
+if(query.forecast.solar==TRUE) {
   try(response.forecast.solar <- jsonlite::fromJSON(forecast.solar.endpoint), silent = T)
   if(length(response.forecast.solar) > 0) {
     target.response <- which((names(unlist(response.forecast.solar$result)))==target.forecast)
