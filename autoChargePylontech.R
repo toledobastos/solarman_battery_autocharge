@@ -16,8 +16,9 @@ over.production <- 12000 # threshold after which autocharge is turned off if bat
 battery.size <- (3552*2) # battery storage in wh
 battery.voltage <- 48 # battery changing voltage
 battery.max.current <- 37 # battery recommended maximum charge rate
-retrieve.battery.soc <- TRUE # requires access to home assistant database 
-record.solar.generation <- TRUE # requires access to home assistant database
+retrieve.battery.soc <- FALSE # requires access to home assistant database 
+record.solar.generation <- TRUE # retrieves solar production from inverter (default) or home assistant
+solar.generation.source <- "inverter" # set "HA" to retrieve production from HA instead of the inventer
 battery.reserve <- 55 # battery dod plus minimum charge (percentage)
 battery.reserve.force <- TRUE # charge overnight to battery.reserve  
 winter.buffer <- 740 # minimum morning charge in wh for winter days when the sun comes later in the day
@@ -84,19 +85,29 @@ if(retrieve.battery.soc==T) {
 
 # record actual solar generation
 if(record.solar.generation==T) {
-  solis.generation <- "sqlite3 -header -csv /var/snap/home-assistant-snap/current/home-assistant_v2.db \"select * from states where entity_id=\'sensor.solis_local_daily_generation\'\";"
-  solis.generation.db <- read.table(textConnection((system(paste0(solis.generation), intern = T))), sep = ",")
-  solis.generation.db$time <- as.POSIXct(solis.generation.db$V8, format="%Y-%m-%d %H:%M:%S")
-  solis.generation.db$date <- as.Date(solis.generation.db$time)
-  suppressWarnings(solis.generation.db$production <- as.numeric(solis.generation.db$V4))
-  solis.generation.db$production[is.na(solis.generation.db$production)] <- 0
-  solis.generation.week <- aggregate(solis.generation.db$production, by = list(solis.generation.db$date), max)
-  solis.generation.week$x <- solis.generation.week$x*1000
+  if(solar.generation.source=="HA") {
+    solis.generation <- "sqlite3 -header -csv /var/snap/home-assistant-snap/current/home-assistant_v2.db \"select * from states where entity_id=\'sensor.solis_local_daily_generation\'\";"
+    solis.generation.db <- read.table(textConnection((system(paste0(solis.generation), intern = T))), sep = ",")
+    solis.generation.db$time <- as.POSIXct(solis.generation.db$V8, format="%Y-%m-%d %H:%M:%S")
+    solis.generation.db$date <- as.Date(solis.generation.db$time)
+    suppressWarnings(solis.generation.db$production <- as.numeric(solis.generation.db$V4))
+    solis.generation.db$production[is.na(solis.generation.db$production)] <- 0
+    solis.generation.week <- aggregate(solis.generation.db$production, by = list(solis.generation.db$date), max)
+    solis.generation.week$x <- solis.generation.week$x*1000 
+    }
+  if(solar.generation.source!="HA") {
+    solis_battery_generated_yesterday.py <- paste0("/usr/bin/python ", wd, "solis_battery_generated_yesterday.py")
+    solis_battery_generated_yesterday.py.response <- character()
+    while(length(solis_battery_generated_yesterday.py.response)!=1) { Sys.sleep(5); solis_battery_generated_yesterday.py.response <- system(paste0(solis_battery_generated_yesterday.py), intern=T) }
+    print(solis_battery_generated_yesterday.py.response)
+    solis_battery_generated_yesterday.py.response <- as.integer(gsub("\\D+", "", solis_battery_generated_yesterday.py.response))*100
+  }
   if(file.exists("daily.estimates.csv")) { 
     solis.daily.estimates <- read.csv("daily.estimates.csv", sep = ",")
     write.table(solis.daily.estimates, "daily.estimates.csv.bck", sep = ",", row.names = F, append = F)
     solis.daily.estimates$date <- as.Date(solis.daily.estimates$date)
-    solis.daily.estimates$actual[solis.daily.estimates$date==(target.forecast-1)] <- solis.generation.week$x[solis.generation.week$Group.1==(target.forecast-1)]
+    if(solar.generation.source=="HA") { solis.daily.estimates$actual[solis.daily.estimates$date==(target.forecast-1)] <- solis.generation.week$x[solis.generation.week$Group.1==(target.forecast-1)] }
+    if(solar.generation.source!="HA") { solis.daily.estimates$actual[solis.daily.estimates$date==(target.forecast-1)] <- solis_battery_generated_yesterday.py.response }
     write.table(solis.daily.estimates, "daily.estimates.csv", sep = ",", row.names = F, append = F)
   }
 }
