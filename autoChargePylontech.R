@@ -71,7 +71,8 @@ if(lubridate::hour(Sys.time()) %in% c(0, 24, 1, 2)) {
 # build API call endpoint
 if(query.forecast.solar==TRUE) { forecast.solar.endpoint <- paste0("https://api.forecast.solar/estimate/watthours/day/",latitude,"/",longitude,"/",slope,"/",orientation.forecast.solar,"/",kwp) }
 if(query.solcast==TRUE) { solcast.endpoint <- paste0("https://api.solcast.com.au/rooftop_sites/",solcast.resource.id,"/forecasts?period=PT30M&hours=24&format=json&api_key=",solcast.api.key) }
-if(query.met.eireann==TRUE) { met.eireann.endpoint <- paste0("http://metwdb-openaccess.ichec.ie/metno-wdb2ts/locationforecast?lat=",latitude,";long=",longitude) }
+#if(query.met.eireann==TRUE) { met.eireann.endpoint <- paste0("http://metwdb-openaccess.ichec.ie/metno-wdb2ts/locationforecast?lat=",latitude,";long=",longitude) } ## old and deprecated
+if(query.met.eireann==TRUE) { met.eireann.endpoint <- paste0("http://openaccess.pf.api.met.ie/metno-wdb2ts/locationforecast?lat=",latitude,";long=",longitude) }
 
 # retrieve battery state of charge
 battery.soc <- battery.power <- 0
