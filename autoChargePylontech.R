@@ -126,7 +126,7 @@ charging.total <- charging.time*battery.voltage
 if(adjust.dst.winter==T) {
   solis_battery_time.py.response <- character()
   # set charging time to summer schedule
-  if(Sys.Date() %in% dateseq[which(lubridate::dst(as.character(dateseq))==F)]) {
+  if(Sys.Date() %in% dateseq[which(lubridate::dst(as.character(dateseq))==T)]) {
     if(all(current.schedule==summer.schedule)) { print("Time schedule correct") } else {
       while(length(solis_battery_time.py.response)!=12) {
         Sys.sleep(5)
@@ -135,7 +135,7 @@ if(adjust.dst.winter==T) {
     }
   }
   # set charging time to winter schedule
-  if(Sys.Date() %in% dateseq[which(lubridate::dst(as.character(dateseq))==T)]) {
+  if(Sys.Date() %in% dateseq[which(lubridate::dst(as.character(dateseq))==F)]) {
     if(all(current.schedule==winter.schedule)) { print("Time schedule correct") } else {
       while(length(solis_battery_time.py.response)!=12) {
         Sys.sleep(5)
